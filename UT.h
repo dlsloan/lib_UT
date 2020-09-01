@@ -26,6 +26,16 @@ void func()
 
 #define UT_ASSERT(value) ut_assert((value), #value, __FILE__, __LINE__)
 
+#define UT_EXCEPT(type, code) ({                                    \
+  bool _has_err_ = false;                                           \
+  try {                                                             \
+    code;                                                           \
+  } catch (const type & err) {                                      \
+    _has_err_ = true;                                               \
+  }                                                                 \
+  ut_assert(_has_err_, "Excpected Exception", __FILE__, __LINE__);  \
+})
+
 class ut {
   public:
     ut(std::function<void()> fn, const char *name);

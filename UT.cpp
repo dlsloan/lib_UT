@@ -17,6 +17,8 @@
 
 #include "UT/UT.h"
 
+#include "Base/Exception.h"
+
 ut *ut::reg_ = nullptr;
 
 int main(int argc, char **argv)
@@ -39,7 +41,12 @@ void ut::runAll()
   ut *node = ut::reg_;
   while (node) {
     std::cout << "Test " << node->name_ << ":" << std::endl;
+    try {
     node->fn_();
+    } catch (Base::Exception& ex) {
+      std::cout << "Error: " << ex.toString().c_str() << std::endl;
+      exit(1);
+    }
     std::cout << "  OK" << std::endl;
     node = node->next_;
   }
